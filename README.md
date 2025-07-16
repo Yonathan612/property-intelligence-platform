@@ -1,151 +1,186 @@
-# Chicago Property Search & Interactive Map
+# Auburn Gresham Property Search System
 
-An interactive web application that allows users to search for specific property information using addresses or Property Identification Numbers (PINs) with rich geographic and administrative data.
+A full-stack property search application focused on the 79th Street corridor in Auburn Gresham, Chicago. This system provides comprehensive property information with intuitive search capabilities and modern UI design.
 
-## Project Overview
+## 🌟 Features
 
-This application combines a Next.js frontend with a Django REST API backend to provide comprehensive property information for Chicago area properties. Users can search by address, PIN, or click on map locations to view detailed property data including tax information, school districts, flood zones, and more.
+- **Smart Search**: Real-time search by PIN, address, or business name
+- **Autocomplete**: Instant suggestions as you type
+- **Property Details**: Comprehensive property information including coordinates, business details, and classification
+- **Google Maps Integration**: Direct links to property locations
+- **Responsive Design**: Modern, clean interface optimized for all devices
+- **Fast API**: Django REST Framework backend with efficient data retrieval
 
-## Features
+## 🏢 Data Coverage
 
-- **Interactive Map**: Mapbox-powered map with property visualization
-- **Address Search**: Search properties by address with autocomplete
-- **PIN Lookup**: Search using Property Identification Numbers
-- **Comprehensive Data**: Access to 100+ data fields per property including:
-  - Tax information and districts
-  - School districts (elementary, secondary, unified)
-  - Census and demographic data
-  - Environmental data (flood zones, noise contours)
-  - Economic zones and TIF districts
-  - Community areas and wards
+- **156 properties** along the 79th Street corridor
+- **Real property data** including PINs, addresses, business names
+- **Location data** with precise coordinates
+- **Property classifications** and community area information
 
-## Files Overview
+## 🚀 Technology Stack
 
-### Core Application Files
-- `property_search_app/` - Main Next.js frontend application
-- `property_api/` - Django backend API for data processing
-- `data/common_county_data_complete.csv` - Primary property dataset (169 records)
+### Backend
+- **Django** - Python web framework
+- **Django REST Framework** - API development
+- **SQLite** - Database
+- **Python 3.13** - Programming language
 
-### Data Structure
-The CSV contains comprehensive property information with 100+ columns including:
-- **Location**: PIN, coordinates (lat/lon), ZIP codes
-- **Administrative**: Townships, wards, community areas
-- **Schools**: Elementary, secondary, and unified districts
-- **Tax Districts**: Municipality, library, park, fire protection
-- **Environmental**: Flood zones, airport noise, enterprise zones
-- **Census**: Block groups, tracts, congressional districts
+### Frontend
+- **Next.js 14** - React framework
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **Lucide Icons** - Modern icon library
 
-### Legacy Components
-- `Map-draft-master/` - Original map prototype (Mapbox implementation)
-- `backend-master/` - Django backend template
-- `frontend-master/` - Next.js frontend template
+## 📁 Project Structure
 
-## Quick Start
+```
+auburn-gresham-property-search/
+├── simple_property_api/          # Django backend
+│   ├── properties/               # Property app
+│   ├── property_api/            # Django settings
+│   └── load_data.py             # Data import script
+├── property_search_app/          # Next.js frontend
+│   ├── src/
+│   │   ├── app/                 # App router pages
+│   │   ├── components/          # React components
+│   │   ├── lib/                 # Utilities & API
+│   │   └── types/               # TypeScript types
+├── data/                        # CSV data files
+└── README.md
+```
+
+## 🛠️ Installation & Setup
 
 ### Prerequisites
-- Node.js 18+ 
-- Python 3.8+
-- Mapbox API key
+- **Python 3.13+**
+- **Node.js 18+**
+- **npm or yarn**
 
-### Installation
-1. **Frontend Setup**:
-   ```bash
-   cd property_search_app
-   npm install
-   npm run dev
-   ```
+### Backend Setup
+```bash
+# Navigate to backend directory
+cd simple_property_api
 
-2. **Backend Setup**:
-   ```bash
-   cd property_api
-   pip install -r requirements.txt
-   python manage.py migrate
-   python manage.py runserver
-   ```
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-3. **Environment Variables**:
-   - Create `.env` with Mapbox token
-   - Configure database settings
+# Install dependencies
+pip install django djangorestframework django-cors-headers
 
-## Usage
+# Run migrations
+python3 manage.py migrate
 
-1. **Search by Address**: Enter full or partial address in search bar
-2. **Search by PIN**: Enter 14-digit Property Identification Number
-3. **Map Interaction**: Click on map markers to view property details
-4. **Filter & Sort**: Use sidebar filters for property types, tax codes, etc.
+# Load property data
+python3 load_data.py
 
-## Data Sources
+# Start development server
+python3 manage.py runserver
+```
 
-- **Primary**: Cook County Property Data (2025)
-- **License**: Public domain
-- **Coverage**: Chicago metropolitan area
-- **Updates**: Annual refresh
+### Frontend Setup
+```bash
+# Navigate to frontend directory
+cd property_search_app
 
-## Architecture
+# Install dependencies
+npm install
 
-### Frontend (Next.js + TypeScript)
-- Interactive map with Mapbox GL JS
-- Property search and filtering
-- Responsive design with Tailwind CSS
-- Real-time data visualization
+# Start development server
+npm run dev
+```
 
-### Backend (Django REST Framework)
-- RESTful API for property data
-- CSV data processing and indexing
-- Search optimization and caching
-- User authentication (optional)
+## 🔧 API Endpoints
 
-### Data Processing
-- CSV parsing and validation
-- Geospatial indexing for map performance
-- Search algorithm optimization
+### Base URL: `http://localhost:8000/api/v1/`
 
-## API Endpoints
+- **GET** `/properties/` - List all properties (paginated)
+- **GET** `/properties/{pin}/` - Get property details by PIN
+- **GET** `/properties/search/?q={query}&type={type}` - Search properties
+  - `type`: `all`, `pin`, `address`, `business`
+- **GET** `/properties/autocomplete/?q={query}` - Get search suggestions
 
-- `GET /api/properties/` - List all properties
-- `GET /api/properties/search/?q={query}` - Search by address/PIN
-- `GET /api/properties/{pin}/` - Get specific property details
-- `GET /api/properties/nearby/?lat={lat}&lon={lon}` - Find nearby properties
+### Example API Usage
+```bash
+# Search by address
+curl "http://localhost:8000/api/v1/properties/search/?q=1201%20W%2079TH%20ST&type=address"
 
-## File Naming Conventions
+# Get autocomplete suggestions
+curl "http://localhost:8000/api/v1/properties/autocomplete/?q=1201"
+```
 
-- **Scripts**: `process_property_data.py`, `import_csv_data.py`
-- **Components**: `PropertySearch.tsx`, `InteractiveMap.tsx`
-- **API Views**: `property_search_views.py`, `map_data_views.py`
-- **Data Files**: `common_county_data_complete.csv`
+## 🎯 Usage
 
-## Development Workflow
+1. **Start the backend server** (Django on port 8000)
+2. **Start the frontend server** (Next.js on port 3000)
+3. **Navigate to** `http://localhost:3000/property-search`
+4. **Search for properties** using:
+   - Property PIN numbers
+   - Street addresses
+   - Business names
+5. **View detailed property information**
+6. **Click "View on Map"** to see location in Google Maps
 
-1. **Feature Development**: Create branch from `main`
-2. **Testing**: Run tests for both frontend and backend
-3. **Code Review**: PR review process
-4. **Deployment**: Automated deployment pipeline
+## 📊 Database Schema
 
-## Contributing
+### Property Model
+- `pin` (CharField) - Primary key, 14-digit property identifier
+- `address` (CharField) - Street address
+- `business` (CharField) - Business name (if applicable)
+- `year` (IntegerField) - Property year
+- `property_class` (CharField) - Property classification code
+- `township_name` (CharField) - Township name
+- `zip_code` (CharField) - ZIP code
+- `latitude` (FloatField) - Latitude coordinate
+- `longitude` (FloatField) - Longitude coordinate
+- `community_area_name` (CharField) - Chicago community area
 
-1. Follow naming conventions outlined above
-2. Add tests for new features
-3. Update documentation
-4. Ensure responsive design
+## 🎨 UI Features
 
-## Technical Details
+- **Clean, modern design** with Tailwind CSS
+- **Real-time search** with loading states
+- **Autocomplete dropdown** with address suggestions
+- **Property details modal** with comprehensive information
+- **Responsive layout** for desktop and mobile
+- **Smooth animations** and transitions
+- **Google Maps integration** for location viewing
 
-### Performance Optimization
-- CSV data indexed in backend database
-- Map markers clustered for performance
-- Lazy loading for property details
-- Caching for frequently accessed data
+## 🔧 Development Features
 
-### Security Considerations
-- API rate limiting
-- Input validation and sanitization
-- Optional user authentication
-- CORS configuration
+- **TypeScript** for type safety
+- **REST API** with Django REST Framework
+- **Component-based architecture** with React
+- **Tailwind CSS** for rapid styling
+- **Git version control** with comprehensive history
+- **Modular code structure** for maintainability
 
-## Results Summary
+## 📈 Performance
 
-The application provides instant access to comprehensive property information for Chicago area properties, combining geographic visualization with detailed administrative and environmental data. Users can efficiently search, explore, and analyze property data through an intuitive interface.
+- **Fast search** with efficient Django ORM queries
+- **Pagination** for large result sets
+- **Optimized frontend** with Next.js
+- **Lazy loading** for improved performance
+- **Minimal API calls** with smart caching
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Property data sourced from Chicago property records
+- Auburn Gresham community for inspiration
+- Django and Next.js communities for excellent frameworks
 
 ---
 
-*Built with Next.js, Django, Mapbox, and comprehensive Chicago property data* 
+**Built with ❤️ for the Auburn Gresham community** 
