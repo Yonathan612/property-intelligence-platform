@@ -1,0 +1,1 @@
+# Management commands for property data 
