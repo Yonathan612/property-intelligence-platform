@@ -24,6 +24,29 @@ class Property(models.Model):
     y_3435 = models.FloatField(null=True, blank=True, help_text="Y coordinate in Illinois State Plane")
     zip_code = models.CharField(max_length=10, null=True, blank=True, db_index=True)
     
+    # SSA 32 Property Information
+    property_address = models.CharField(max_length=200, null=True, blank=True, help_text="Property street address")
+    property_city = models.CharField(max_length=100, null=True, blank=True, help_text="Property city")
+    property_state = models.CharField(max_length=2, null=True, blank=True, help_text="Property state")
+    square_footage_land = models.IntegerField(null=True, blank=True, help_text="Land square footage")
+    
+    # Assessment Information
+    total_assessed_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, help_text="Total assessed value")
+    land_assessed_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, help_text="Land assessed value")
+    building_assessed_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, help_text="Building assessed value")
+    
+    # Property Status
+    vacancy_type = models.CharField(max_length=50, null=True, blank=True, help_text="Vacancy status")
+    assessor_office_link = models.URLField(null=True, blank=True, help_text="Link to assessor office page")
+    
+    # Taxpayer Information
+    taxpayer_id = models.CharField(max_length=20, null=True, blank=True, help_text="Taxpayer ID")
+    mailing_name = models.CharField(max_length=200, null=True, blank=True, help_text="Mailing name")
+    mailing_address = models.CharField(max_length=200, null=True, blank=True, help_text="Mailing address")
+    mailing_city = models.CharField(max_length=100, null=True, blank=True, help_text="Mailing city")
+    mailing_state = models.CharField(max_length=2, null=True, blank=True, help_text="Mailing state")
+    mailing_zip = models.CharField(max_length=10, null=True, blank=True, help_text="Mailing ZIP code")
+    
     # Administrative divisions
     triad_name = models.CharField(max_length=50, help_text="Triad name")
     triad_code = models.IntegerField(help_text="Triad code")
@@ -129,6 +152,16 @@ class Property(models.Model):
     @property
     def address_display(self):
         """Generate a display address when available"""
+        # Prioritize actual property address from SSA 32 data
+        if self.property_address:
+            parts = [self.property_address]
+            if self.property_city and self.property_state:
+                parts.append(f"{self.property_city}, {self.property_state}")
+            elif self.zip_code:
+                parts.append(f"ZIP {self.zip_code}")
+            return ", ".join(parts)
+        
+        # Fallback to community area and ZIP
         parts = []
         if self.chicago_community_area_name:
             parts.append(self.chicago_community_area_name)

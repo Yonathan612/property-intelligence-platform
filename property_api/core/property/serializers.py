@@ -14,7 +14,12 @@ class PropertySummarySerializer(serializers.ModelSerializer):
         fields = [
             'pin', 'pin10', 'coordinates', 'address_display',
             'chicago_community_area_name', 'zip_code', 'ward_num',
-            'township_name', 'class_code'
+            'township_name', 'class_code', 'property_address',
+            'property_city', 'property_state', 'total_assessed_value',
+            'vacancy_type', 'mailing_name', 'year', 'square_footage_land',
+            'land_assessed_value', 'building_assessed_value', 'taxpayer_id',
+            'mailing_address', 'mailing_city', 'mailing_state', 'mailing_zip',
+            'tax_code', 'assessor_office_link'
         ]
 
 

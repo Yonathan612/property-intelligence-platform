@@ -1,22 +1,45 @@
 export interface Property {
   pin: string;
-  address: string;
-  business: string;
+  address?: string; // Legacy field
+  business?: string; // Legacy field
   year: number;
-  property_class: string;
+  property_class?: string; // Legacy field
   township_name: string;
   zip_code: string;
   latitude: number;
   longitude: number;
-  community_area_name: string;
+  community_area_name?: string; // Legacy field
   
-  // Legacy fields for backward compatibility
+  // Core fields for backward compatibility
   coordinates?: [number, number];
   pin10?: string;
   address_display?: string;
   class_code?: string;
   ward_num?: number;
   chicago_community_area_name?: string;
+  
+  // SSA 32 Property Information
+  property_address?: string;
+  property_city?: string;
+  property_state?: string;
+  square_footage_land?: number;
+  
+  // Assessment Information
+  total_assessed_value?: string;
+  land_assessed_value?: string;
+  building_assessed_value?: string;
+  
+  // Property Status
+  vacancy_type?: string;
+  assessor_office_link?: string;
+  
+  // Taxpayer Information
+  taxpayer_id?: string;
+  mailing_name?: string;
+  mailing_address?: string;
+  mailing_city?: string;
+  mailing_state?: string;
+  mailing_zip?: string;
   
   // Location data
   x_3435?: number;
@@ -113,6 +136,7 @@ export interface SearchSuggestion {
   pin: string;
   display: string;
   type?: "pin" | "address" | "business";
+  subtitle?: string;
 }
 
 export interface NearbyPropertiesResult {

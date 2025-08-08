@@ -34,10 +34,13 @@ class PropertyListView(generics.ListAPIView):
     
     filterset_fields = [
         'class_code', 'zip_code', 'ward_num', 'township_name',
-        'chicago_community_area_name', 'triad_name'
+        'chicago_community_area_name', 'triad_name', 'property_city',
+        'property_state', 'vacancy_type', 'tax_code'
     ]
     search_fields = [
-        'pin', 'pin10', 'chicago_community_area_name', 'zip_code'
+        'pin', 'pin10', 'chicago_community_area_name', 'zip_code',
+        'property_address', 'property_city', 'property_state',
+        'mailing_name', 'class_code', 'vacancy_type'
     ]
     ordering_fields = ['pin', 'zip_code', 'ward_num']
     ordering = ['pin']

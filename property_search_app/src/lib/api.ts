@@ -44,19 +44,26 @@ export const propertyApi = {
     searchType: 'all' | 'pin' | 'address' | 'business' = 'all',
     limit: number = 50
   ): Promise<{ results: Property[] }> => {
-    const response = await api.get('/properties/search/', {
-      params: { q: query, type: searchType, limit }
+    const response = await api.get('/properties/', {
+      params: { search: query, page_size: limit }
     });
-    return { results: response.data || [] };
+    return { results: response.data.results || [] };
   },
 
   // Get autocomplete suggestions
   getAutocompleteSuggestions: async (query: string, limit: number = 10): Promise<SearchSuggestion[]> => {
     if (query.length < 2) return [];
-    const response = await api.get('/properties/autocomplete/', {
-      params: { q: query, limit }
+    const response = await api.get('/properties/', {
+      params: { search: query, page_size: limit }
     });
-    return response.data || [];
+    // Convert property results to search suggestions
+    const properties = response.data.results || [];
+    return properties.map((prop: Property) => ({
+      pin: prop.pin,
+      display: prop.property_address || prop.address_display || `PIN: ${prop.pin}`,
+      type: 'address' as const,
+      subtitle: prop.class_code ? `Class: ${prop.class_code}` : 'Property'
+    }));
   },
 
   // Get nearby properties

@@ -38,7 +38,7 @@ export default function PropertySearchPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gray-900">
-                Auburn Gresham Property Search
+                SSA 32 Property Search
               </h1>
             </div>
           </div>

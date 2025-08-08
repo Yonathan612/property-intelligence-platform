@@ -24,7 +24,7 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({
   onClearSearch,
   initialResults = [],
   initialHasSearched = false,
-  placeholder = "Search by PIN, address, or business name...",
+  placeholder = "Search by PIN, Address...",
   className = ""
 }) => {
   const [query, setQuery] = useState('');
@@ -99,9 +99,10 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({
   // Handle suggestion selection
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
     // Extract just the address from the display format "address - business"
-    const address = suggestion.display.includes(' - ') 
-      ? suggestion.display.split(' - ')[0] 
-      : suggestion.display;
+    const display = suggestion.display || `PIN: ${suggestion.pin}`;
+    const address = display.includes(' - ') 
+      ? display.split(' - ')[0] 
+      : display;
     setQuery(address);
     setShowSuggestions(false);
     handleSearch(address);
@@ -171,17 +172,15 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({
   // Get display text for suggestion (just the address)
   const getSuggestionDisplayText = (suggestion: SearchSuggestion) => {
     // Extract just the address from the display format "address - business"
-    return suggestion.display.includes(' - ') 
-      ? suggestion.display.split(' - ')[0] 
-      : suggestion.display;
+    const display = suggestion.display || `PIN: ${suggestion.pin}`;
+    return display.includes(' - ') 
+      ? display.split(' - ')[0] 
+      : display;
   };
 
-  // Get business name from suggestion for subtitle
+  // Get subtitle for suggestion
   const getSuggestionSubtitle = (suggestion: SearchSuggestion) => {
-    if (suggestion.display.includes(' - ')) {
-      return suggestion.display.split(' - ')[1];
-    }
-    return 'Property';
+    return suggestion.subtitle || 'Property';
   };
 
   return (
@@ -244,8 +243,10 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({
               </div>
               <div className="flex-1">
                 <div className="text-sm font-medium">{getSuggestionDisplayText(suggestion)}</div>
-                <div className="text-xs text-gray-500">
-                  {getSuggestionSubtitle(suggestion)}
+                <div className="text-xs text-gray-500 flex items-center space-x-2">
+                  <span className="font-mono">PIN: {suggestion.pin}</span>
+                  <span>•</span>
+                  <span>{getSuggestionSubtitle(suggestion)}</span>
                 </div>
               </div>
             </div>
@@ -275,12 +276,17 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({
                   <div className="flex-1">
                     <div className="font-medium text-sm">PIN: {property.pin}</div>
                     <div className="text-sm text-gray-600">
-                      {property.address}
+                      {property.property_address || property.address || 'No address available'}
                     </div>
-                    <div className="text-xs text-gray-500">
-                      {property.business && `Business: ${property.business}`}
-                      {property.property_class && ` • Class: ${property.property_class}`}
-                      {property.community_area_name && ` • ${property.community_area_name}`}
+                    {property.property_city && property.property_state && (
+                      <div className="text-xs text-gray-500">
+                        {property.property_city}, {property.property_state} {property.zip_code ? Math.floor(Number(property.zip_code)) : ''}
+                      </div>
+                    )}
+                    <div className="text-xs text-gray-500 mt-1">
+                      {property.class_code && `Class: ${property.class_code}`}
+                      {property.total_assessed_value && ` • Value: $${Number(property.total_assessed_value).toLocaleString()}`}
+                      {property.vacancy_type && property.vacancy_type !== 'NO STATUS' && ` • ${property.vacancy_type}`}
                     </div>
                   </div>
                   <Button variant="ghost" size="sm">
@@ -291,7 +297,7 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({
             ) : (
               <div className="p-6 text-center text-gray-500">
                 <p>No properties found matching your search.</p>
-                <p className="text-sm mt-1">Try searching by PIN, address, or business name.</p>
+                <p className="text-sm mt-1">Try searching by PIN, address, owner name, or property class.</p>
               </div>
             )}
           </div>
