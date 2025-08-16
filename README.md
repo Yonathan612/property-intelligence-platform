@@ -1,4 +1,4 @@
-# Auburn Gresham Property Search System
+# Property Intelligence Platform
 
 A full-stack property search application focused on the 79th Street corridor in Auburn Gresham, Chicago. This system provides comprehensive property information with intuitive search capabilities and modern UI design.
 
@@ -13,7 +13,7 @@ A full-stack property search application focused on the 79th Street corridor in 
 
 ## 🏢 Data Coverage
 
-- **156 properties** along the 79th Street corridor
+- **100+ properties** along the 79th Street corridor
 - **Real property data** including PINs, addresses, business names
 - **Location data** with precise coordinates
 - **Property classifications** and community area information
@@ -24,7 +24,7 @@ A full-stack property search application focused on the 79th Street corridor in 
 - **Django** - Python web framework
 - **Django REST Framework** - API development
 - **SQLite** - Database
-- **Python 3.13** - Programming language
+- **Python 3.8+** - Programming language
 
 ### Frontend
 - **Next.js 14** - React framework
@@ -35,7 +35,7 @@ A full-stack property search application focused on the 79th Street corridor in 
 ## 📁 Project Structure
 
 ```
-auburn-gresham-property-search/
+property-intelligence-platform/
 ├── simple_property_api/          # Django backend
 │   ├── properties/               # Property app
 │   ├── property_api/            # Django settings
@@ -53,7 +53,7 @@ auburn-gresham-property-search/
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
-- **Python 3.13+**
+- **Python 3.8+**
 - **Node.js 18+**
 - **npm or yarn**
 
